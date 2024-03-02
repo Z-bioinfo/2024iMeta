@@ -1,0 +1,87 @@
+---
+title: "Fig. 2. Quantity and quality of viral contigs derived from viral-like particle-concentrated (VPC) and non-concentrated (NC) metagenomes. "
+author: "Jiayu Zhang"
+date: "2024/3/2"
+---
+  
+  
+
+library(tidyverse)
+library(ggplot2)
+library(ggExtra)
+
+library(cowplot)
+
+
+setwd("D:/论文/论文8-三个污水厂病毒组/submit3.2-iMeta/v3/version3.1/scripts/Figure 2")
+
+
+##########################Figure 2C
+VPC <- read.delim('Soure_Data_Figure2C.txt', row.names = 1,
+                  head=1, sep = '\t', stringsAsFactors = FALSE, check.names = FALSE) %>%
+  mutate(loglength=log10(contig_length)) 
+
+scatter <- ggplot(data=VPC,aes(x=loglength,y=completeness,fill=checkv_quality),colour="black") + 
+  geom_point(aes(fill=checkv_quality,shape=provirus),size=3)+
+  scale_fill_manual(values= c("#CD534CFF", "#8491B4FF", "#EFC000FF","#91D1C2FF","gray"))+
+  #scale_colour_manual(values=c("#CD534CFF", "#8491B4FF", "#EFC000FF","#91D1C2FF","gray"))+
+  scale_shape_manual(values = c(21,24))+
+  scale_x_continuous(limits = c(2.5, 6.5)) +
+  theme_bw(20) +  #theme_minimal()+
+  xlab("log10(length) (bp)")+ylab("Completeness (%)")   +
+  theme(
+    #text=element_text(size=15,face="plain",color="black"),
+    axis.title=element_text(size=18,face="plain",color="black"),
+    axis.text = element_text(size=18,face="plain",color="black"),
+    legend.text= element_text(size=18,face="plain",color="black"),
+    legend.title=element_text(size=18,face="plain",color="black"),
+    legend.background=element_blank(),
+    #plot.margin = unit(c(1,4,1,1),"lines"), 
+    #legend.position = c(0.95,0.25)
+    legend.position = "left"
+  )
+
+scatter
+
+S1<-ggMarginal(scatter,type="density",color="black",fill="#008EA0FF",groupColour = FALSE,groupFill = F)
+S1
+
+
+
+
+##########################Figure 2D
+NC <- read.delim('Soure_Data_Figure2D.txt', row.names = 1,
+                  head=1, sep = '\t', stringsAsFactors = FALSE, check.names = FALSE) %>%
+  mutate(loglength=log10(contig_length)) 
+
+scatter2 <- ggplot(data=NC,aes(x=loglength,y=completeness,fill=checkv_quality),colour="black") + 
+  geom_point(aes(fill=checkv_quality,shape=provirus),size=3)+
+  scale_fill_manual(values= c("#CD534CFF", "#8491B4FF", "#EFC000FF","#91D1C2FF","gray"))+
+  #scale_colour_manual(values=c("#CD534CFF", "#8491B4FF", "#EFC000FF","#91D1C2FF","gray"))+
+  scale_shape_manual(values = c(21,24))+
+  scale_x_continuous(limits = c(2.5, 6.5)) +
+  theme_bw(20) +  #theme_minimal()+
+  xlab("log10(length) (bp)")+ylab("Completeness (%)")   +
+  theme(
+    #text=element_text(size=15,face="plain",color="black"),
+    axis.title=element_text(size=18,face="plain",color="black"),
+    axis.text = element_text(size=18,face="plain",color="black"),
+    legend.text= element_text(size=18,face="plain",color="black"),
+    legend.title=element_text(size=18,face="plain",color="black"),
+    legend.background=element_blank(),
+    #plot.margin = unit(c(1,4,1,1),"lines"), 
+    #legend.position = c(0.95,0.25)
+    legend.position = "left"
+  )
+
+
+scatter2
+
+S2<-ggMarginal(scatter2,type="density",color="black",fill="#008EA0FF",groupColour = FALSE,groupFill = F)
+S2
+
+
+#########
+plot_grid(S2,S1,ncol=2,
+          nrow = 1,
+          labels = c("A","B"))
