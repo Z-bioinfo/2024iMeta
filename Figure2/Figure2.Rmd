@@ -1,8 +1,8 @@
----
-title: "Fig. 2. Quantity and quality of viral contigs derived from viral-like particle-concentrated (VPC) and non-concentrated (NC) metagenomes. "
-author: "Jiayu Zhang"
-date: "2024/3/2"
----
+#---
+#title: "Fig. 2. Quantity and quality of viral contigs derived from viral-like particle-concentrated (VPC) and non-concentrated (NC) metagenomes. "
+#author: "Jiayu Zhang"
+#date: "2024/3/2"
+#---
   
   
 
@@ -43,8 +43,8 @@ scatter <- ggplot(data=VPC,aes(x=loglength,y=completeness,fill=checkv_quality),c
 
 scatter
 
-S1<-ggMarginal(scatter,type="density",color="black",fill="#008EA0FF",groupColour = FALSE,groupFill = F)
-S1
+f2C<-ggMarginal(scatter,type="density",color="black",fill="#008EA0FF",groupColour = FALSE,groupFill = F)
+f2C
 
 
 
@@ -77,11 +77,11 @@ scatter2 <- ggplot(data=NC,aes(x=loglength,y=completeness,fill=checkv_quality),c
 
 scatter2
 
-S2<-ggMarginal(scatter2,type="density",color="black",fill="#008EA0FF",groupColour = FALSE,groupFill = F)
-S2
+f2D<-ggMarginal(scatter2,type="density",color="black",fill="#008EA0FF",groupColour = FALSE,groupFill = F)
+f2D
 
 
 #########
-plot_grid(S2,S1,ncol=2,
+plot_grid(f2C,f2D,ncol=2,
           nrow = 1,
-          labels = c("A","B"))
+          labels = c("C","D"))
