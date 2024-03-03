@@ -1,0 +1,42 @@
+#---
+#title: "Fig. 4. Diversity and relative abundance of viruses in each sample."
+#author: "Jiayu Zhang"
+#date: "2024/3/2"
+#---
+##  
+
+
+library(ComplexHeatmap)
+library(circlize)
+library(dendextend)
+library(dendsort)
+
+
+###############################################Figure 6A
+amg<-read.table("Soure_Data_Figure6A.tsv", header=T, sep = "\t", row.names = 1)
+
+amgt <- t(scale(t(amg)))
+
+mycol <- colorRamp2(c(-1, 0, 2),c("#00A087FF", "white", "#FF6F00FF"))
+
+circos.par(gap.after=c(50))
+circos.heatmap(dt,
+               col = mycol,
+               cluster = TRUE,
+               dend.side = "inside",
+               rownames.side = "outside",
+               rownames.col = "black",
+               rownames.cex = 0.7,
+               track.height = 0.3, 
+               dend.track.height = 0.10, 
+               dend.callback = function(dend, m, si) { 
+                 color_branches(dend,k = 10,col = 1:10) 
+               })
+
+
+lg <- Legend(title = "Express",
+             col_fun = mycol,
+             direction = c("vertical"),
+             title_position = c('topcenter'))
+draw(lg, x = unit(0.9, "npc"), y = unit(0.5, "npc"), just = c("right", "center"))
+circos.clear()
