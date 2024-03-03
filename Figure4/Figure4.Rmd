@@ -149,3 +149,5 @@ library(patchwork)
 f4A+f4B+f4C+
   plot_layout(ncol = 1,heights =c(0.5,1,1))+ #widths = c(1, 2)
   plot_annotation(tag_levels = "A") 
+
+ggsave('Figure4.pdf', AP, width = 12, height = 13)
