@@ -1,0 +1,175 @@
+#---
+#title: "Fig. 4. Diversity and relative abundance of viruses in each sample."
+#author: "Jiayu Zhang"
+#date: "2024/3/2"
+#---
+##  
+
+
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(ggpmisc)
+library(cowplot)
+
+
+####################################################Figure 5A
+mag<-read.csv("Soure_Data_Figure5A.csv", header=T, row.names = 1)
+mag$Family  = factor(mag$Family, levels=mag$Family)
+
+p1sa <- ggplot(mag, aes( x =  Family,
+                          y = -MAG.number,
+))+   #fill = Classification
+  #scale_fill_manual(values = rev(c('#e4e242','#8ab92b','#80c5d8','#437eb8','#c4a2c5')))+ 
+  scale_y_continuous(expand = c(0,0),limits = c(-800,0),labels = c(8000,600,400,200,0)) +
+  geom_bar(stat = 'identity',fill ="#00A1D5FF")+
+  #coord_flip()+         
+  ylab('MAG number)')+
+  xlab('') +
+  theme(axis.title=element_text(size=14))+
+  theme(axis.text.y=element_text(size=13,color = "black")) + #,face = 1
+  theme(axis.text.x=element_text(size=13,color = "black")) +
+  theme(axis.text.x=element_text(angle=45,hjust = 1,vjust=1))
+p1sa
+
+
+p2s <- ggplot(mag, aes( x = Family,
+                         y = viralHost.event))+
+  #theme_bw() +
+  scale_y_continuous(expand = c(0,0),limits = c(0,1300)) +
+  #geom_col()+
+  geom_bar(stat = 'identity',fill ="#DF8F44FF")+
+  #scale_fill_manual("blue")+
+  #coord_flip()+  
+  ylab('Viral Host linkage')+
+  xlab('') +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        legend.position = "top") +
+  theme(axis.title=element_text(size=14))+
+  theme(axis.text.y=element_text(size=13,color = "black")) +
+  theme(axis.text.y=element_text(angle=0)) #,hjust = 1,vjust=1
+p2s 
+
+
+
+plot1s <- 
+  ggplot(MT3a, aes(x = ID,y = -Viral.rank)) +
+  scale_y_continuous(#labels = scales::percent,expand = expansion(mult = c(0, 0.1)), 
+    #breaks = seq(0,1,0.2),
+    expand = c(0,0),limits = c(-10,0),labels=c(10,7.5,5.0,2.5,0.0),
+    position = "right",name = "Viral rank")  +
+  scale_x_continuous(expand = c(0.02,0.02))  +  #,limits = c(0,10) ,breaks=c(1:nrow(MT3a)
+  geom_point(size=2,color="#9467BDFF")+
+  geom_line(size=0.7,color="#9467BDFF")+
+  theme_half_open(11, rel_small = 1) +
+  #coord_flip()+  
+  rremove("x.axis")+
+  rremove("xlab") +
+  rremove("x.text") +
+  rremove("x.ticks") +
+  #rremove("legend") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank()) +
+  theme(axis.title=element_text(size=14))+
+  theme(axis.text.y=element_text(size=13,color = "black")) +
+  theme(axis.text.y=element_text(angle=0))  #,hjust = 0,vjust=0
+plot1s
+
+detach("package:patchwork")
+aligned_plots1sa <- align_plots(p1sa, plot1s, align="hv", axis="tblr")
+plotAsa<-ggdraw(aligned_plots1sa[[1]]) + draw_plot(aligned_plots1sa[[2]])
+plotAsa
+
+
+plot2s <- 
+  ggplot(MT3a, aes(x = ID,y =Host.rank)) +
+  scale_y_continuous(#labels = scales::percent,expand = expansion(mult = c(0, 0.1)), 
+    #breaks = seq(0,1,0.2),
+    expand = c(0,0),limits = c(0,2.5),
+    position = "right",name = "Viral rank")  +
+  scale_x_continuous(expand = c(0.02,0.02))  +  #,limits = c(0,10)
+  geom_point(size=2,color="#31A354FF")+
+  geom_line(size=0.7,color="#31A354FF")+  
+  theme_half_open(11, rel_small = 1) +
+  #coord_flip()+  
+  rremove("x.axis")+
+  rremove("xlab") +
+  rremove("x.text") +
+  rremove("x.ticks") +
+  #rremove("legend") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank()) +
+  theme(axis.title=element_text(size=14))+
+  theme(axis.text.y=element_text(size=13,color = "black")) +
+  theme(axis.text.y=element_text(angle=0)) # ,hjust = 0,vjust=0.5
+plot2s
+
+aligned_plots2s <- align_plots(p2s, plot2s, align="hv", axis="tblr")
+plotBs<-ggdraw(aligned_plots2s[[1]]) + draw_plot(aligned_plots2s[[2]])
+plotBs
+
+
+library(patchwork)
+pa2s<-plotBs/plotAsa+plot_layout(guides = 'collect')+ plot_layout(heights = c(0.66,1))
+pa2s
+
+ggsave('Figure5A.pdf',width = 7,height = 5)
+
+
+
+
+
+####################################################Figure 5C
+div<-read.csv("Soure_Data_Figure5C.csv", header=T, row.names = 1)
+
+pm <- ggplot(data =div, aes(x = Shannon.Wiener, y = Shannon.Wiener.MAG, group =group, color = group)) +
+  geom_point(size=2) +
+  scale_y_continuous(expand = c(0,0),limits = c(0,8.5)) +  
+  theme_bw() +
+  theme(axis.title=element_text(size=14),legend.text=element_text(size=13))+
+  theme(axis.text.y=element_text(size=13,color = "black")) + #,face = 1
+  theme(axis.text.x=element_text(size=13,color = "black"))
+pm
+
+
+pm2<-pm + stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = '~`,`~')), method = 'spearman', 
+                   label.x.npc = 'left', label.y.npc = 'top', size = 5, show.legend = FALSE)
+
+pm3<- pm2 + geom_smooth(method = 'lm', formula = y~x, se = TRUE, show.legend = FALSE) +
+  stat_poly_eq(aes(label = paste(..eq.label.., ..rr.label.., stat(p.value.label), sep = '~`,`~')),
+               formula = y~x, parse = TRUE, label.x.npc = 'right', label.y.npc = 'top', size = 5)
+pm3
+
+
+pn <- ggplot(data =alpha_data_all, aes(x = observed_species, y = observed_species.MAG, group =group, color = group)) +
+  geom_point(size=2) +
+  scale_y_continuous(expand = c(0,0),limits = c(0,1000)) +   
+  theme_bw() +
+  theme(axis.title=element_text(size=14),legend.text=element_text(size=13))+
+  theme(axis.text.y=element_text(size=13,color = "black")) + #,face = 1
+  theme(axis.text.x=element_text(size=13,color = "black"))
+pn
+
+
+
+pn2<-pn + stat_cor(aes(label = paste(..r.label.., ..p.label.., sep = '~`,`~')), method = 'spearman', 
+                   label.x.npc = 'left', label.y.npc = 'top', size = 5, show.legend = FALSE)
+
+pn3<- pn2 + geom_smooth(method = 'lm', formula = y~x, se = TRUE, show.legend = FALSE) +
+  stat_poly_eq(aes(label = paste(..eq.label.., ..rr.label.., stat(p.value.label), sep = '~`,`~')),
+               formula = y~x, parse = TRUE, label.x.npc = 'right', label.y.npc = 'top', size = 5)
+pn3
+
+
+
+##################
+
+library(patchwork)
+
+(plotBs/plotAsa)/(pm3 | pn3)+
+  plot_layout(ncol = 1,nrow=3,heights =c(0.45,1,0.8) ) + 
+plot_annotation(tag_levels = "A") 
