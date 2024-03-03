@@ -118,7 +118,7 @@ p1<-ggplot(data =phy,aes(x = Sample, y = RPKM.value, alluvium = Phylum, stratum 
   geom_alluvium(aes(fill = Phylum),alpha = .5,width = 0.5)+ 
   geom_stratum(aes(fill = Phylum),width = 0.5)+scale_fill_manual(values = rev(c(colour1[-length(colour1)])))+
   theme_classic()+scale_y_continuous(expand = c(0,0))+
-  labs(x = '', y = 'Relative Abundance(%)')+
+  labs(x = '', y = 'Relative Abundance (RPKM)')+
   main_theme + theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   #geom_flow(alpha = 0.3)+ 
   geom_flow(width =1/3,alpha = 0.2,knot.pos = 1/4)+  
@@ -134,7 +134,7 @@ p2<-ggplot(data =fam,aes(x = Sample, y = RPKM.value, alluvium = Family, stratum 
   geom_alluvium(aes(fill = Family),alpha = .5,width = 0.5)+ 
   geom_stratum(aes(fill = Family),width = 0.5)+scale_fill_manual(values =c(colour2))+
   theme_classic()+scale_y_continuous(expand = c(0,0))+
-  labs(x = '', y = 'Relative Abundance(%)')+
+  labs(x = '', y = 'Relative Abundance (RPKM)')+
   main_theme + theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   #geom_flow(alpha = 0.3)+
   geom_flow(width =1/3,alpha = 0.2,knot.pos = 1/4)+  
@@ -150,4 +150,4 @@ f4<-f4A+f4B+f4C+
   plot_layout(ncol = 1,heights =c(0.5,1,1))+ #widths = c(1, 2)
   plot_annotation(tag_levels = "A") 
 f4
-ggsave('Figure4.pdf', f4, width = 12, height = 13)
+ggsave('Figure4.pdf', f4, width = 12, height = 14)
