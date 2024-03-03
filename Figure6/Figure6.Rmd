@@ -20,7 +20,7 @@ amgt <- t(scale(t(amg)))
 mycol <- colorRamp2(c(-1, 0, 2),c("#00A087FF", "white", "#FF6F00FF"))
 
 circos.par(gap.after=c(50))
-circos.heatmap(dt,
+circos.heatmap(amgt,
                col = mycol,
                cluster = TRUE,
                dend.side = "inside",
